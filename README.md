@@ -58,4 +58,5 @@ El guion completo, con tiempos y demostración, está en [`VIDEO.md`](VIDEO.md).
 
 ## Entrega
 
-El código fuente y este README están en el repositorio local. Para entregar el repositorio remoto, crea uno vacío en GitHub y publica la carpeta con `git init`, `git add .`, `git commit` y `git push`. El video se sube por separado a YouTube; anota su URL en la entrega.
+Repositorio público: [jhon-florez/duelo-de-alquimistas](https://github.com/jhon-florez/duelo-de-alquimistas). El código fuente, la configuración de VS Code y este README están publicados allí. El video se sube por separado a YouTube; agrega su URL a la entrega después de grabarlo.
+
