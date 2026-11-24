@@ -45,18 +45,19 @@ src/main/java/duelo/
   modelo/       Carta, jugador y reglas de la partida
   estructuras/  estructuras de datos implementadas desde cero
   ia/           árbol de decisión del rival
-  ui/           ventana y componentes Swing
+  interfaz/     ventana y componentes Swing
 ```
+
+La ilustración de fondo se encuentra en `recursos/fondo-alquimia.jpg`.
 
 ## Controles y reinicio
 
 Las cartas se juegan con clic. **Terminar turno** cede la iniciativa al rival. **Nueva partida** reinicia vidas, mazos, manos, energía, escudos e historial.
 
-## Guion sugerido para el video (7–8 minutos)
+## Video de presentación
 
-El guion completo, con tiempos y demostración, está en [`VIDEO.md`](VIDEO.md). Graba la pantalla mientras ejecutas el juego y explica cada estructura mostrando su clase fuente. El enlace de YouTube se agrega a la entrega después de subir el video.
+La entrega incluye un video de al menos 7 minutos que muestra el uso del juego y explica las estructuras de datos y algoritmos implementados. Agrega el enlace de YouTube a la entrega.
 
 ## Entrega
 
 Repositorio público: [jhon-florez/duelo-de-alquimistas](https://github.com/jhon-florez/duelo-de-alquimistas). El código fuente, la configuración de VS Code y este README están publicados allí. El video se sube por separado a YouTube; agrega su URL a la entrega después de grabarlo.
-

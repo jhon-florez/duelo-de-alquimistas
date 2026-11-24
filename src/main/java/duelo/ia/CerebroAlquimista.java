@@ -11,12 +11,14 @@ public final class CerebroAlquimista {
 
     public int elegirCarta(Jugador rival, Jugador jugador) {
         boolean tieneCuracion = false;
+        // El árbol necesita saber si el rival tiene una carta para curarse.
         for (int i = 0; i < rival.getCantidadCartas(); i++)
             if (rival.getCarta(i).getTipo() == TipoCarta.CURACION) tieneCuracion = true;
         ArbolDecision.Contexto contexto = new ArbolDecision.Contexto(
                 rival.getVida(), jugador.getVida(), rival.getEnergia(), tieneCuracion);
         ArbolDecision.Accion accion = arbol.decidir(contexto);
         int elegida = mejorCarta(rival, accion);
+        // Si no hay carta para la prioridad, prueba las alternativas en orden.
         if (elegida < 0) elegida = mejorCarta(rival, ArbolDecision.Accion.ATAQUE);
         if (elegida < 0) elegida = mejorCarta(rival, ArbolDecision.Accion.ESCUDO);
         if (elegida < 0) elegida = mejorCarta(rival, ArbolDecision.Accion.CURAR);
@@ -30,6 +32,7 @@ public final class CerebroAlquimista {
         for (int i = 0; i < jugador.getCantidadCartas(); i++) {
             Carta carta = jugador.getCarta(i);
             if (carta.getCoste() > jugador.getEnergia() || !coincide(carta, accion)) continue;
+            // Entre cartas del mismo tipo favorece más poder por menor coste.
             int valor = carta.getPoder() - carta.getCoste();
             if (valor > puntuacion) { puntuacion = valor; elegida = i; }
         }

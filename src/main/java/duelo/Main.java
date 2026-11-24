@@ -1,6 +1,6 @@
 package duelo;
 
-import duelo.ui.VentanaJuego;
+import duelo.interfaz.VentanaJuego;
 import javax.swing.SwingUtilities;
 
 public final class Main {

@@ -28,7 +28,7 @@ public final class MotorPartida {
         turnos.clear(); historial.clear();
         turnos.offer(Turno.JUGADOR); turnos.offer(Turno.RIVAL);
         jugador.robarInicial(4); rival.robarInicial(4); jugador.iniciarPrimeraMano();
-        registrar("El duelo comienza. Tú tienes la iniciativa.");
+        registrar("Sistema | El duelo comienza. Tú tienes la iniciativa.");
         alCambiar.run();
     }
 
@@ -37,7 +37,6 @@ public final class MotorPartida {
         Carta carta = jugador.jugar(indice);
         if (carta == null) return false;
         aplicar(carta, jugador, rival);
-        registrar("Jugaste " + carta.getNombre() + ".");
         revisarFinal(); alCambiar.run();
         return true;
     }
@@ -45,7 +44,7 @@ public final class MotorPartida {
     public void terminarTurno() {
         if (terminada || turnoActual != Turno.JUGADOR) return;
         avanzarTurno();
-        registrar("El Maestro Ámbar analiza sus opciones.");
+        registrar("Sistema | Maestro Ámbar analiza sus opciones.");
         alCambiar.run();
     }
 
@@ -55,11 +54,11 @@ public final class MotorPartida {
         while (!terminada && jugadas < 3) {
             int indice = cerebro.elegirCarta(rival, jugador);
             explicacionIA = cerebro.getExplicacion();
-            if (indice < 0) { registrar(explicacionIA); break; }
+            if (indice < 0) { registrar("Sistema | " + explicacionIA); break; }
             Carta carta = rival.jugar(indice);
             if (carta == null) break;
             aplicar(carta, rival, jugador);
-            registrar("Rival juega " + carta.getNombre() + ". " + explicacionIA);
+            registrar("Sistema | Decisión del Maestro Ámbar: " + explicacionIA);
             jugadas++;
             revisarFinal();
             alCambiar.run();
@@ -69,37 +68,58 @@ public final class MotorPartida {
     }
 
     private void avanzarTurno() {
+        // El turno atendido pasa al final de la cola para alternar jugador y rival.
         Turno terminado = turnos.poll();
         if (terminado != null) turnos.offer(terminado);
         turnoActual = turnos.isEmpty() ? Turno.JUGADOR : turnos.peek();
         Jugador activo = turnoActual == Turno.JUGADOR ? jugador : rival;
         activo.iniciarTurno();
-        if (activo.getCantidadCartas() > 0) registrar(activo.getNombre() + " roba una carta y recupera 3 de energía.");
-        else registrar(activo.getNombre() + " recupera 3 de energía; no quedan cartas para robar.");
+        String emisor = turnoActual == Turno.JUGADOR ? "Tú" : "Maestro Ámbar";
+        if (activo.getCantidadCartas() > 0) registrar(emisor + " | roba una carta y recupera 3 de energía.");
+        else registrar(emisor + " | recupera 3 de energía; no quedan cartas para robar.");
     }
 
     private void aplicar(Carta carta, Jugador origen, Jugador objetivo) {
         switch (carta.getTipo()) {
             case ATAQUE:
                 objetivo.recibirDanio(carta.getPoder());
-                registrar(objetivo.getNombre() + " recibe " + carta.getPoder() + " de daño.");
+                registrar(emisor(origen) + " | " + verbo(origen, "lanza", "lanzas") + " "
+                        + carta.getNombre() + " que " + minusculaInicial(carta.getDescripcion()) + " a "
+                        + (objetivo == jugador ? "ti." : "Maestro Ámbar."));
                 break;
             case CURACION:
-                registrar(origen.getNombre() + " recupera " + origen.curar(carta.getPoder()) + " de vida.");
+                registrar(emisor(origen) + " | usa " + carta.getNombre() + ": recupera "
+                        + origen.curar(carta.getPoder()) + " de vida.");
                 break;
             case ESCUDO:
                 origen.ganarEscudo(carta.getPoder());
-                registrar(origen.getNombre() + " obtiene " + carta.getPoder() + " de escudo.");
+                registrar(emisor(origen) + " | usa " + carta.getNombre() + ": obtiene "
+                        + carta.getPoder() + " de escudo.");
                 break;
-            default: break;
+            default:
+                registrar(emisor(origen) + " | usa " + carta.getNombre() + ".");
+                break;
         }
+    }
+
+    private String emisor(Jugador jugador) {
+        return jugador == rival ? "Maestro Ámbar" : "Tú";
+    }
+
+    private String verbo(Jugador jugador, String terceraPersona, String segundaPersona) {
+        return jugador == rival ? terceraPersona : segundaPersona;
+    }
+
+    private String minusculaInicial(String texto) {
+        if (texto == null || texto.isEmpty()) return "";
+        return Character.toLowerCase(texto.charAt(0)) + texto.substring(1);
     }
 
     private void revisarFinal() {
         if (jugador.getVida() > 0 && rival.getVida() > 0) return;
         terminada = true;
         resultado = jugador.getVida() > 0 ? "¡Victoria! Has vencido al Maestro Ámbar." : "El Maestro Ámbar ganó esta vez. Inténtalo de nuevo.";
-        registrar(resultado);
+        registrar("Sistema | " + resultado);
     }
 
     private void registrar(String mensaje) {

@@ -8,5 +8,10 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
+if not exist recursos\fondo-alquimia.jpg (
+  echo No se encontro el fondo en la carpeta recursos.
+  pause
+  exit /b 1
+)
+copy /Y recursos\fondo-alquimia.jpg out\fondo-alquimia.jpg >nul
 java -cp out duelo.Main
-

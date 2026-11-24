@@ -6,6 +6,7 @@ public final class Pila<T> {
     private int cantidad;
 
     public void push(T elemento) {
+        // Si el arreglo se llena, se duplica antes de agregar la carta.
         if (cantidad == elementos.length) crecer();
         elementos[cantidad++] = elemento;
     }
@@ -13,6 +14,7 @@ public final class Pila<T> {
     @SuppressWarnings("unchecked")
     public T pop() {
         if (isEmpty()) return null;
+        // Se retira el último elemento agregado: así funciona LIFO.
         int indice = --cantidad;
         T elemento = (T) elementos[indice];
         elementos[indice] = null;
@@ -28,6 +30,7 @@ public final class Pila<T> {
     public int size() { return cantidad; }
 
     private void crecer() {
+        // Copiar en el mismo orden conserva la cima de la pila.
         Object[] nuevo = new Object[elementos.length * 2];
         System.arraycopy(elementos, 0, nuevo, 0, cantidad);
         elementos = nuevo;

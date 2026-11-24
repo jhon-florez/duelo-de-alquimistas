@@ -9,6 +9,7 @@ public final class ListaEnlazada<T> {
         Nodo<T> nuevo = new Nodo<>(valor);
         if (primero == null) primero = nuevo;
         else {
+            // Se recorre hasta el final para enlazar el nodo sin usar una lista de Java.
             Nodo<T> actual = primero;
             while (actual.siguiente != null) actual = actual.siguiente;
             actual.siguiente = nuevo;
@@ -28,6 +29,7 @@ public final class ListaEnlazada<T> {
         Nodo<T> anterior = null;
         Nodo<T> actual = primero;
         for (int i = 0; i < indice; i++) { anterior = actual; actual = actual.siguiente; }
+        // Quitar el primero cambia la cabeza; si no, se enlazan los nodos vecinos.
         if (anterior == null) primero = actual.siguiente;
         else anterior.siguiente = actual.siguiente;
         cantidad--;

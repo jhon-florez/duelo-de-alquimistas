@@ -35,6 +35,7 @@ public final class Jugador {
 
     private void reciclarDescarte() {
         if (descarte.isEmpty()) return;
+        // El descarte vuelve al mazo, pero se baraja para cambiar el orden anterior.
         Carta[] recicladas = new Carta[descarte.size()];
         for (int i = 0; i < recicladas.length; i++) recicladas[i] = descarte.pop();
         Barajador.barajar(recicladas, aleatorio);
@@ -51,6 +52,7 @@ public final class Jugador {
     }
 
     public void recibirDanio(int cantidad) {
+        // El escudo absorbe primero; solo el daño restante reduce la vida.
         int absorbido = Math.min(escudo, cantidad);
         escudo -= absorbido;
         vida = Math.max(0, vida - (cantidad - absorbido));

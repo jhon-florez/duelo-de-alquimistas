@@ -11,6 +11,7 @@ public final class ArbolDecision {
         Nodo ataque = hoja(Accion.ATAQUE);
         Nodo ataquePotente = hoja(Accion.ATAQUE_POTENTE);
         Nodo curar = hoja(Accion.CURAR);
+        // Prioridad: curarse, atacar si el jugador está débil, atacar fuerte o defenderse.
         raiz = pregunta(Condicion.VIDA_BAJA, curar,
                 pregunta(Condicion.JUGADOR_DEBIL, ataque,
                         pregunta(Condicion.ENERGIA_ALTA, ataquePotente, escudo)));
@@ -18,6 +19,7 @@ public final class ArbolDecision {
 
     public Accion decidir(Contexto contexto) {
         Nodo actual = raiz;
+        // Cada condición guía el recorrido por la rama "sí" o "no" hasta una hoja.
         while (!actual.esHoja()) actual = evaluar(actual.condicion, contexto) ? actual.si : actual.no;
         return actual.accion;
     }
